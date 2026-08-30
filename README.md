@@ -41,7 +41,7 @@ Every color is a semantic token, so switching palettes recolors the waybar, menu
 
 ## The rest of the site
 
-The chrome is a waybar. Pages are workspaces **1–9**. Everything else lives in the Omarchy menu.
+The chrome is a waybar. Home is the mark. Workspaces **1–9** are manual, plugins, news, teams, patrons, sponsorships, air, community, and merch. Everything else lives in the Omarchy menu.
 
 <p align="center">
   <img src="docs/screenshots/menu.jpg" alt="Omarchy menu" width="49%">
@@ -62,7 +62,7 @@ The chrome is a waybar. Pages are workspaces **1–9**. Everything else lives in
   <img src="docs/screenshots/workstations.jpg" alt="Workstations wall">
 </p>
 
-Home is the ASCII mark, install line, videos, and latest news. Then news, extra themes, teams, patrons, sponsorships, artists in residence, meetups, and the workstations wall.
+Home is the ASCII mark, install line, videos, and latest news. Then news, teams, patrons, sponsorships, artists in residence, and the workstations wall.
 
 ## Taste
 
