@@ -34,7 +34,7 @@ def render(page: Path) -> None:
 
     waybar = (PARTIALS / "waybar.html").read_text()
     ws = fm.get("ws", "")
-    for n in range(1, 10):
+    for n in range(1, 12):
         waybar = waybar.replace("{{WS%d}}" % n, ' aria-current="page"' if str(n) == ws else "")
     waybar = waybar.replace("{{PREFIX}}", prefix)
 
@@ -53,7 +53,7 @@ def render(page: Path) -> None:
 
 {footer}
 {overlays}
-<script src="{prefix}assets/js/omarchy.js?v=20260830-7" type="module"></script>
+<script src="{prefix}assets/js/omarchy.js?v=20260830-12" type="module"></script>
 </body>
 </html>
 """

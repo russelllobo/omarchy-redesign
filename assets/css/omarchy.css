@@ -27,6 +27,7 @@
   --warn: #e0af68;
   --err: #f7768e;
   --cyan: #7dcfff;
+  --highlight: #b4f9f8;
 }
 :root[data-theme='gruvbox'] {
   --bg: #282828;
@@ -41,6 +42,7 @@
   --warn: #fabd2f;
   --err: #fb4934;
   --cyan: #8ec07c;
+  --highlight: #d8efc4;
 }
 :root[data-theme='catppuccin'] {
   --bg: #1e1e2e;
@@ -55,6 +57,7 @@
   --warn: #f9e2af;
   --err: #f38ba8;
   --cyan: #94e2d5;
+  --highlight: #b4eee4;
 }
 :root[data-theme='everforest'] {
   --bg: #2d353b;
@@ -69,6 +72,7 @@
   --warn: #dbbc7f;
   --err: #e67e80;
   --cyan: #7fbbb3;
+  --highlight: #c5e4c8;
 }
 :root[data-theme='ristretto'] {
   --bg: #2c2521;
@@ -83,6 +87,7 @@
   --warn: #f9cc6c;
   --err: #fd6883;
   --cyan: #85dacc;
+  --highlight: #ffc9d2;
 }
 :root[data-theme='kanagawa'] {
   --bg: #1f1f28;
@@ -97,6 +102,7 @@
   --warn: #e6c384;
   --err: #c34043;
   --cyan: #7aa89f;
+  --highlight: #c5e4dc;
 }
 
 /* ---------- Reset & primitives ---------- */
@@ -133,7 +139,7 @@ body {
 ::selection { background: var(--accent); color: var(--bg); }
 
 a { color: var(--accent); text-decoration: none; transition: color var(--t); }
-a:hover { color: var(--cyan); }
+a:hover { color: var(--highlight); }
 p a, li a, td a { text-decoration: underline; text-underline-offset: 0.2em; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
 p a:hover, li a:hover, td a:hover { text-decoration-color: currentColor; }
 
@@ -166,23 +172,24 @@ kbd {
 .waybar__left, .waybar__right { display: flex; align-items: stretch; }
 .waybar__left {
   min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
+  overflow: visible;
 }
-.waybar__left::-webkit-scrollbar { display: none; }
 .waybar__right { flex: none; margin-left: auto; }
 .waybar__brand {
-  display: flex; align-items: center; gap: 0.55rem;
+  display: flex; align-items: stretch;
+  border-right: 1px solid var(--border);
+}
+.waybar__mark {
+  display: flex; align-items: center;
   padding: 0 0.9rem;
-  color: var(--fg); font-weight: 700;
-  border: 0; border-right: 1px solid var(--border);
-  background: none; font: inherit; cursor: pointer;
+  color: var(--fg);
+  border: 0; background: none; font: inherit; cursor: pointer;
   appearance: none;
 }
-.waybar__brand:hover { color: var(--accent); }
+.waybar__mark:hover { color: var(--highlight); }
 .waybar__brand .mark { width: 0.8rem; height: 0.8rem; object-fit: contain; flex: none; }
 
-.workspaces, .elsewhere { display: flex; align-items: stretch; flex: none; }
+.workspaces { display: flex; align-items: stretch; flex: none; }
 .workspace {
   display: flex; align-items: center; justify-content: center;
   min-width: 2.25rem; padding: 0 0.5rem;
@@ -190,23 +197,48 @@ kbd {
   border-right: 1px solid var(--border);
   position: relative;
 }
-.workspace:hover { color: var(--fg); background: var(--bg-panel); }
+.workspace:hover { color: var(--highlight); background: var(--bg-panel); }
 .workspace[aria-current='page'] { color: var(--accent); font-weight: 700; }
 .workspace[aria-current='page']::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent);
 }
-.workspace b { font-weight: 400; color: var(--fg-faint); margin-right: 0.4em; font-size: 0.85em; }
-.workspace[aria-current='page'] b { color: var(--accent-2); }
+.workspace b { font-weight: 400; color: inherit; margin-right: 0.4em; font-size: 0.85em; }
 @media (max-width: 60rem) { .workspace b { display: none; } .workspace { min-width: 1.9rem; } }
 
-.elsewhere { min-width: 0; }
-.workspace--external { color: var(--fg-faint); white-space: nowrap; }
-.workspace--external:hover { color: var(--fg); }
+.workspace--external { white-space: nowrap; }
+.workspace--external:hover { color: var(--highlight); }
+
+.workspace--menu { padding: 0; }
+.workspace__btn {
+  display: flex; align-items: center; justify-content: center;
+  height: 100%; padding: 0 0.5rem;
+  color: inherit; font: inherit; background: none; border: 0; cursor: pointer;
+  appearance: none;
+}
+.workspace__drop {
+  display: none;
+  position: absolute; top: calc(100% + 1px); left: 0; min-width: 8.5rem;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  z-index: 91;
+}
+.workspace--menu:hover .workspace__drop,
+.workspace--menu:focus-within .workspace__drop,
+.workspace--menu.open .workspace__drop { display: flex; }
+.workspace__drop-item {
+  padding: 0.55rem 0.75rem;
+  color: var(--fg-dim);
+  white-space: nowrap;
+}
+.workspace__drop-item:hover { color: var(--highlight); background: var(--bg-panel); }
+.workspace__drop-item[aria-current='page'] { color: var(--accent); font-weight: 700; }
 @media (max-width: 90rem) {
-  .waybar__brand { padding-inline: 0.65rem; gap: 0.4rem; }
+  .waybar__mark { padding-inline: 0.65rem; }
   .workspace { min-width: auto; padding-inline: 0.35rem; }
-  .workspace b { display: none; }
-  .indicator { padding-inline: 0.55rem; }
+  .workspace__btn { padding-inline: 0.35rem; }
+  .indicator { padding-inline: 0.7rem; }
+  .indicator span { display: none; }
 }
 
 .waybar__group { display: flex; align-items: center; border-left: 1px solid var(--border); }
@@ -216,15 +248,17 @@ kbd {
   color: var(--fg);
   border: 0; background: none; font: inherit; cursor: pointer;
   position: relative;
+  transition: background-color var(--t), color var(--t);
 }
-.indicator:hover { background: var(--bg-panel); }
+.indicator:hover { color: var(--highlight); background: var(--bg-panel); }
 .indicator svg { width: 0.95rem; height: 0.95rem; flex: none; }
 
 /* Progressive disclosure: idle indicators hidden; bar hover reveals them dimly */
-.indicator--idle { opacity: 0; transition: opacity var(--t), color var(--t); }
+.indicator--idle { opacity: 0; transition: opacity var(--t), color var(--t), background-color var(--t); }
 .waybar:hover .indicator--idle { opacity: 0.45; }
 .indicator--idle:hover { opacity: 1; }
 .indicator--active { color: var(--accent); }
+.indicator--active:hover { color: var(--highlight); background: var(--bg-panel); }
 
 /* Keep the desktop workspace metaphor without making the document wider than
    the device. On phones, the bar becomes a breadcrumb: brand + current page. */
@@ -237,14 +271,13 @@ kbd {
   .indicator--active { display: none; }
 }
 @media (max-width: 23rem) {
-  .waybar__brand { padding-inline: 0.7rem; }
-  .waybar__brand .mark { display: none; }
+  .waybar__mark { padding-inline: 0.7rem; }
   .workspace { padding-inline: 0.6rem; }
 }
 
 /* ==========================================================================
    News bar — a floating box, same width as the install command, sitting
-   just above the wordmark. One accent hit (the tag). Dismissed per item.
+   just above the wordmark.
    ========================================================================== */
 .newsbar {
   max-width: 46rem; margin: 0 auto 1.5rem;
@@ -261,27 +294,25 @@ kbd {
   display: flex; align-items: center; gap: 0.8rem;
   color: var(--fg); text-decoration: none;
 }
-.newsbar__tag {
-  flex: none;
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--bg); background: var(--accent); padding: 0.15em 0.55em;
-  transition: background-color var(--t);
-}
-.newsbar__date { flex: none; color: var(--fg-dim); font-variant-numeric: tabular-nums; }
+.newsbar__date { flex: none; color: var(--fg-dim); font-variant-numeric: tabular-nums; transition: color var(--t); }
 .newsbar__txt {
   min-width: 0; font-weight: 500;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.newsbar__go { flex: none; margin-left: auto; padding-left: 1rem; color: var(--fg-dim); }
-.newsbar__item:hover .newsbar__txt, .newsbar__item:hover .newsbar__go { color: var(--accent); }
-.newsbar__x {
-  flex: none; border: 0; background: none; cursor: pointer;
-  font: inherit; font-size: 1.05rem; line-height: 1;
-  color: var(--fg-faint); padding: 0.5rem 0 0.5rem 0.85rem;
   transition: color var(--t);
 }
-.newsbar__x:hover { color: var(--fg); }
-.newsbar:hover { border-color: var(--accent); }
+.newsbar__go { flex: none; margin-left: auto; padding-left: 1rem; color: var(--fg-dim); transition: color var(--t); }
+@media (hover: hover) {
+  .newsbar:hover {
+    background: var(--highlight);
+    border-color: var(--highlight);
+  }
+  .newsbar:hover .newsbar__item,
+  .newsbar:hover .newsbar__txt,
+  .newsbar:hover .newsbar__go,
+  .newsbar:hover .newsbar__date {
+    color: var(--bg);
+  }
+}
 @media (max-width: 44rem) {
   .newsbar__date, .newsbar__go { display: none; }
 }
@@ -294,7 +325,7 @@ kbd {
 .page-head { padding: clamp(2.5rem, 7vh, 5rem) 0 clamp(1.5rem, 4vh, 2.75rem); }
 .page-head .crumbs { font-size: 0.8125rem; color: var(--fg-dim); margin-bottom: 1.25rem; }
 .page-head .crumbs a { color: var(--fg-dim); text-decoration: none; }
-.page-head .crumbs a:hover { color: var(--accent); }
+.page-head .crumbs a:hover { color: var(--highlight); }
 .page-head .crumbs .sep { color: var(--fg-faint); margin: 0 0.5em; }
 .page-head h1 { font-size: clamp(1.7rem, 3.6vw, 2.6rem); }
 .page-head .lede { color: var(--fg-dim); max-width: 46rem; margin-top: 0.75rem; font-size: 1.05em; }
@@ -307,7 +338,7 @@ kbd {
 .sect__title::before { content: '#'; color: var(--accent); font-weight: 400; }
 main.home .sect__title::before { content: none; }
 .sect__more { font-size: 0.8125rem; color: var(--fg-dim); text-decoration: none; }
-.sect__more:hover { color: var(--accent); }
+.sect__more:hover { color: var(--highlight); }
 
 /* ==========================================================================
    Animated ASCII wordmark & hero
@@ -336,10 +367,8 @@ main.home .sect__title::before { content: none; }
   transition: color var(--t);
   white-space: pre;
 }
-.ascii > a:hover pre { color: var(--accent); }
+.ascii > a:hover pre { color: var(--highlight); }
 
-/* The still mark is hidden briefly while the upstream laseretch playback
-   loads. It reappears automatically if the effect cannot start. */
 html.wte-home .ascii pre {
   animation: wte-fallback 0s 2s forwards;
   visibility: hidden;
@@ -372,21 +401,46 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
   text-align: center; margin-top: clamp(1.5rem, 4vh, 2.5rem);
   font-size: clamp(1.05rem, 2.3vw, 1.5rem); font-weight: 500; letter-spacing: -0.01em;
 }
-.hero__tag .by a { color: var(--fg-dim); font-weight: 400; }
-.hero__tag .by a:hover { color: var(--accent); }
+.hero__tag .by a {
+  color: var(--cyan);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1.75px;
+  text-underline-offset: 2.5px;
+  text-decoration-color: var(--cyan);
+}
+.hero__tag .by a:hover { color: var(--highlight); text-decoration-color: var(--highlight); }
 .hero__sub {
   text-align: center; color: var(--fg-dim); max-width: 44rem; margin: 0.9rem auto 0;
 }
-.hero__sub a { color: var(--accent); }
+.hero__sub a { color: inherit; }
+.hero__sub a:hover { color: var(--highlight); }
 
 /* Release metadata */
 .install__meta {
   display: flex; justify-content: center; gap: 0.75rem 1.5rem; flex-wrap: wrap;
   margin-top: 1.1rem; font-size: 0.875rem; font-weight: 500; color: var(--fg);
 }
-.install__meta > span { color: var(--accent); font-weight: 700; }
 .install__meta a { color: var(--fg); text-decoration: underline; text-underline-offset: 0.2em; text-decoration-color: var(--accent); }
-.install__meta a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.install__meta a:hover { color: var(--highlight); text-decoration-color: var(--highlight); }
+.install__meta a.install__ver {
+  position: relative;
+  display: inline-flex; align-items: center;
+  color: var(--accent); font-weight: 700;
+  text-decoration: none;
+}
+.install__meta a.install__ver:hover { color: var(--highlight); text-decoration: none; }
+.install__gh {
+  position: absolute; right: 100%; top: 50%;
+  width: 0.9em; height: 0.9em;
+  margin-right: 0.4em;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t);
+}
+.install__ver:hover .install__gh,
+.install__ver:focus-visible .install__gh { opacity: 1; }
 
 /* ==========================================================================
    Buttons — rectangular, 1px, uppercase-ish. No pills.
@@ -401,9 +455,11 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
   transition: border-color var(--t), color var(--t), background-color var(--t);
 }
 .btn svg { width: 1em; height: 1em; }
-.btn:hover { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
 .btn--primary { border-color: var(--accent); color: var(--accent); }
-.btn--primary:hover { background: var(--accent); color: var(--bg); }
+@media (hover: hover) {
+  .btn:hover { border-color: var(--highlight); color: var(--bg); background: var(--highlight); }
+  .btn--primary:hover { border-color: var(--highlight); background: var(--highlight); color: var(--bg); }
+}
 .btn--sm { font-size: 0.8125rem; padding: 0.45em 0.8em; }
 
 /* ==========================================================================
@@ -425,7 +481,7 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
   transition: border-color var(--t), background-color var(--t);
 }
 .video__play svg { width: 1.35rem; height: 1.35rem; fill: var(--fg); margin-left: 0.2em; }
-.video__facade:hover .video__play { border-color: var(--accent); background: var(--accent); }
+.video__facade:hover .video__play { border-color: var(--highlight); background: var(--highlight); }
 .video__facade:hover .video__play svg { fill: var(--bg); }
 .video__label { padding: 0.85rem 1rem; font-size: 0.8125rem; color: var(--fg-dim); display: flex; justify-content: space-between; gap: 1rem; }
 .video__label .who { color: var(--fg-faint); }
@@ -486,7 +542,7 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 .newsitem__date { color: var(--fg-dim); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
 .newsitem__title { font-size: 1.08rem; font-weight: 700; }
 .newsitem__title a { color: var(--fg); text-decoration: none; }
-.newsitem__title a:hover { color: var(--accent); }
+.newsitem__title a:hover { color: var(--highlight); }
 .newsitem__ex { color: var(--fg-dim); font-size: 0.9rem; margin-top: 0.3rem; max-width: 44rem; }
 .newsitem__more { font-size: 0.8125rem; }
 @media (max-width: 44rem) { .newsitem { grid-template-columns: 1fr; gap: 0.2rem; } }
@@ -512,14 +568,22 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 .people { display: grid; grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
 .person { background: var(--bg); padding: 1.1rem; display: flex; flex-direction: column; gap: 0.55rem; }
 .person img { width: 3.75rem; height: 3.75rem; object-fit: cover; filter: grayscale(0.25); border: 1px solid var(--border); transition: filter var(--t), border-color var(--t); }
-.person:hover img { filter: grayscale(0); border-color: var(--accent); }
+.person:hover img { filter: grayscale(0); border-color: var(--highlight); }
 .person__name { font-weight: 700; font-size: 0.95rem; }
 .person__name a { color: var(--fg); text-decoration: none; }
-.person__name a:hover { color: var(--accent); }
+.person__name a:hover { color: var(--highlight); }
 .person__meta { color: var(--fg-dim); font-size: 0.8125rem; }
 .person__bio { color: var(--fg-dim); font-size: 0.8125rem; }
 .person--wide { grid-column: span 2; }
 @media (max-width: 26rem) { .person--wide { grid-column: span 1; } }
+
+/* ==========================================================================
+   beams — ttfx effect on the team headings. The cell spans hold the layout
+   while the beams pass, so nothing reflows; the label carries the real text.
+   ========================================================================== */
+.beams { position: relative; white-space: pre; }
+.beams__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.beams__cell { display: inline-block; }
 
 /* ==========================================================================
    Sponsorships
@@ -548,8 +612,9 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
    Workstations wall — the windows
    ========================================================================== */
 .wall { columns: 4 14rem; column-gap: 0.75rem; }
-.wall figure { break-inside: avoid; margin: 0 0 0.75rem; border: 1px solid var(--border); overflow: hidden; background: var(--bg-panel); }
+.wall figure { break-inside: avoid; margin: 0 0 0.75rem; border: 1px solid var(--border); overflow: hidden; background: var(--bg-panel); transition: border-color var(--t); }
 .wall img { width: 100%; transition: filter var(--t); filter: saturate(0.9); }
+.wall figure:hover { border-color: var(--highlight); }
 .wall figure:hover img { filter: saturate(1.05); }
 
 /* ==========================================================================
@@ -563,7 +628,7 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 .theme-card:hover img { filter: saturate(1.1); }
 .theme-card__name { padding: 0.7rem 0.9rem; font-size: 0.875rem; font-weight: 500; color: var(--fg); display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
 .theme-card__name .ext { color: var(--fg-faint); font-size: 0.85em; }
-.theme-card:hover .theme-card__name { color: var(--accent); }
+.theme-card:hover .theme-card__name { color: var(--highlight); }
 
 /* ==========================================================================
    Footer
@@ -573,7 +638,7 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 .footer__row { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; align-items: baseline; color: var(--fg-dim); font-size: 0.875rem; }
 .footer__row .lbl { color: var(--fg-faint); }
 .footer a { color: var(--fg); }
-.footer a:hover { color: var(--accent); }
+.footer a:hover { color: var(--highlight); }
 .footer__sig { color: var(--fg-faint); font-size: 0.8125rem; }
 .footer__row--partners { align-items: center; gap: 0.45rem 0.7rem; }
 .footer__row--partners .lbl { align-self: baseline; }
@@ -585,8 +650,8 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 .footer__logo-art--basecamp { width: 5.44rem; height: 1.2rem; -webkit-mask-image: url('../img/logos/basecamp.svg'); mask-image: url('../img/logos/basecamp.svg'); }
 .footer__logo-art--hey { width: 2.76rem; height: 1.28rem; -webkit-mask-image: url('../img/logos/hey.svg'); mask-image: url('../img/logos/hey.svg'); }
 .footer__logo-art--cloudflare { width: 7rem; height: 1.05rem; -webkit-mask-image: url('../img/logos/cloudflare.svg'); mask-image: url('../img/logos/cloudflare.svg'); }
-.footer__logo:hover { color: var(--accent); }
-.footer__logo:hover .footer__logo-art { background: var(--accent); }
+.footer__logo:hover { color: var(--highlight); }
+.footer__logo:hover .footer__logo-art { background: var(--highlight); }
 .footer__host-label { margin-left: 0.8rem; }
 @media (max-width: 36rem) {
   .footer__row--partners { gap: 0.45rem 0.55rem; }
@@ -619,7 +684,7 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 }
 .menu__item .keys { color: var(--fg-faint); font-size: 0.8em; margin-left: auto; flex: none; }
 .menu__item .desc { color: var(--fg-dim); font-size: 0.82em; }
-.menu__item.sel { background: var(--accent); color: var(--bg); }
+.menu__item.sel { background: var(--highlight); color: var(--bg); }
 .menu__item.sel .desc, .menu__item.sel .keys { color: color-mix(in srgb, var(--bg) 75%, transparent); }
 .menu__empty { padding: 1.25rem 1rem; color: var(--fg-dim); font-size: 0.875rem; }
 

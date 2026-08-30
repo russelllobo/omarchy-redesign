@@ -9,33 +9,37 @@
 <meta property="og:site_name" content="Omarchy">
 <meta property="og:title" content="Security Credits — Omarchy">
 <meta property="og:description" content="Responsible disclosure: they found it, told us privately, and waited for the patch.">
-<link rel="icon" type="image/png" sizes="300x300" href="../../assets/img/favicon.png?v=20260830-6">
-<link rel="stylesheet" href="../../assets/css/omarchy.css?v=20260830-9">
+<link rel="icon" type="image/svg+xml" href="../../assets/img/omarchy-logo.svg?v=20260830-8">
+<link rel="icon" type="image/png" sizes="300x300" href="../../assets/img/favicon.png?v=20260830-8">
+<link rel="stylesheet" href="../../assets/css/omarchy.css?v=20260830-24">
 </head>
 
 <body>
 <header class="waybar">
   <div class="waybar__left">
-    <button class="waybar__brand" type="button" data-open-menu title="Open Omarchy Menu (Space)" aria-label="Open Omarchy Menu"><img class="mark" src="../../assets/img/favicon.png?v=20260830-6" alt="" aria-hidden="true">omarchy</button>
+    <div class="waybar__brand">
+      <button class="waybar__mark" type="button" data-open-menu title="Open Omarchy Menu (Space)" aria-label="Open Omarchy Menu"><img class="mark" src="../../assets/img/omarchy-logo.svg?v=20260830-7" alt="" aria-hidden="true"></button>
+    </div>
     <nav class="workspaces" aria-label="Pages">
-      <a class="workspace" href="../../index.html"><b>1</b>home</a>
-      <a class="workspace" href="../../news/index.html"><b>2</b>news</a>
-      <a class="workspace" href="../../themes/index.html"><b>3</b>themes</a>
-      <a class="workspace" href="../../teams/index.html"><b>4</b>teams</a>
-      <a class="workspace" href="../../patrons/index.html"><b>5</b>patrons</a>
-      <a class="workspace" href="../../sponsorships/index.html"><b>6</b>sponsors</a>
-      <a class="workspace" href="../../air/index.html"><b>7</b>air</a>
-      <a class="workspace" href="../../meetups/index.html"><b>8</b>meetups</a>
-      <a class="workspace" href="../../workstations/index.html"><b>9</b>stations</a>
-    </nav>
-    <nav class="elsewhere" aria-label="Elsewhere">
-      <span class="elsewhere__label">elsewhere</span>
-      <a href="https://omarchy.org/manual/">Manual</a>
-      <a href="https://github.com/omacom/omarchy">GitHub</a>
-      <a href="https://omarchyplugins.com/">Plugins</a>
-      <a href="https://discord.gg/tXFUdasqhY">Discord</a>
-      <a href="https://supply.37signals.com/collections/omarchy">Merch</a>
-      <a href="../../security/index.html">Security</a>
+      <a class="workspace workspace--external" href="https://omarchy.org/manual/"><b>1</b>manual</a>
+      <a class="workspace workspace--external" href="https://omarchyplugins.com/"><b>2</b>plugins</a>
+      <a class="workspace" href="../../security/index.html" aria-current="page"><b>3</b>security</a>
+      <a class="workspace" href="../../news/index.html"><b>4</b>news</a>
+      <a class="workspace" href="../../teams/index.html"><b>5</b>teams</a>
+      <a class="workspace" href="../../patrons/index.html"><b>6</b>patrons</a>
+      <a class="workspace" href="../../sponsorships/index.html"><b>7</b>sponsorships</a>
+      <a class="workspace" href="../../air/index.html"><b>8</b>air</a>
+      <div class="workspace workspace--menu">
+        <button class="workspace__btn" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-community">
+          <b>9</b>community
+        </button>
+        <div class="workspace__drop" id="nav-community" role="menu">
+          <a class="workspace__drop-item" role="menuitem" href="https://discord.gg/tXFUdasqhY" target="_blank" rel="noopener">discord</a>
+          <a class="workspace__drop-item" role="menuitem" href="../../meetups/index.html">meetups</a>
+        </div>
+      </div>
+      <a class="workspace" href="../../workstations/index.html"><b>10</b>workstations</a>
+      <a class="workspace workspace--external" href="https://supply.37signals.com/collections/omarchy"><b>11</b>merch</a>
     </nav>
   </div>
   <div class="waybar__right">
@@ -87,7 +91,7 @@
       <span class="lbl footer__host-label">hosting by</span>
       <a class="footer__logo footer__logo--cloudflare" href="https://cloudflare.com" target="_blank" rel="noopener noreferrer" aria-label="Cloudflare"><span class="footer__logo-art footer__logo-art--cloudflare" aria-hidden="true"></span></a>
     </div>
-    <div class="footer__sig">Beautiful, functional &amp; opinionated. Not two out of three.</div>
+    <div class="footer__sig">Beautiful, functional &amp; opinionated.</div>
   </div>
 </footer>
 
@@ -103,21 +107,21 @@
 
 <!-- Action registry consumed by the menu -->
 <div hidden aria-hidden="true">
-  <a data-action="Go: Home" data-keys="1" href="../../index.html">h</a>
-  <a data-action="Go: News" data-keys="2" href="../../news/index.html">n</a>
-  <a data-action="Go: Themes" data-keys="3" href="../../themes/index.html">t</a>
-  <a data-action="Go: Teams" data-keys="4" href="../../teams/index.html">t</a>
-  <a data-action="Go: Patrons" data-keys="5" href="../../patrons/index.html">p</a>
-  <a data-action="Go: Sponsorships" data-keys="6" href="../../sponsorships/index.html">s</a>
-  <a data-action="Go: Artists in Residence" data-keys="7" href="../../air/index.html">a</a>
-  <a data-action="Go: Meetups" data-keys="8" href="../../meetups/index.html">m</a>
-  <a data-action="Go: Workstations" data-keys="9" href="../../workstations/index.html">w</a>
-  <a data-action="Go: Security" data-desc="Report a vulnerability" href="../../security/index.html">s</a>
+  <a data-action="Go: Home" href="../../index.html">h</a>
+  <a data-action="Go: Themes" href="../../themes/index.html">t</a>
+  <a data-action="Open the Manual" data-desc="omarchy.org/manual" data-keys="1" href="https://omarchy.org/manual/" target="_blank" rel="noopener">m</a>
+  <a data-action="Open Plugin Marketplace" data-desc="500+ plugins" data-keys="2" href="https://omarchyplugins.com/" target="_blank" rel="noopener">p</a>
+  <a data-action="Go: Security" data-desc="Report a vulnerability" data-keys="3" href="../../security/index.html">s</a>
+  <a data-action="Go: News" data-keys="4" href="../../news/index.html">n</a>
+  <a data-action="Go: Teams" data-keys="5" href="../../teams/index.html">t</a>
+  <a data-action="Go: Patrons" data-keys="6" href="../../patrons/index.html">p</a>
+  <a data-action="Go: Sponsorships" data-keys="7" href="../../sponsorships/index.html">s</a>
+  <a data-action="Go: Artists in Residence" data-keys="8" href="../../air/index.html">a</a>
+  <a data-action="Go: Meetups" data-keys="9" href="../../meetups/index.html">m</a>
+  <a data-action="Go: Workstations" href="../../workstations/index.html">w</a>
   <a data-action="Go: Security credits" href="../../security/credits/index.html">s</a>
   <a data-action="Download ISO" data-desc="omarchy-4.0.1.iso" href="https://iso.omarchy.org/omarchy-4.0.1.iso">i</a>
-  <a data-action="Open the Manual" data-desc="omarchy.org/manual" href="https://omarchy.org/manual/" target="_blank" rel="noopener">m</a>
   <a data-action="Open GitHub" data-desc="omacom/omarchy" href="https://github.com/omacom/omarchy" target="_blank" rel="noopener">g</a>
-  <a data-action="Open Plugin Marketplace" data-desc="500+ plugins" href="https://omarchyplugins.com/" target="_blank" rel="noopener">p</a>
   <a data-action="Open Discord" data-desc="tXFUdasqhY" href="https://discord.gg/tXFUdasqhY" target="_blank" rel="noopener">d</a>
   <a data-action="Open Merch" data-desc="supply.37signals.com" href="https://supply.37signals.com/collections/omarchy" target="_blank" rel="noopener">m</a>
   <a data-action="Be the Omarch" data-desc="omarchs.fyi" href="https://omarchs.fyi" target="_blank" rel="noopener">o</a>
@@ -144,6 +148,6 @@
   </div>
 </div>
 
-<script src="../../assets/js/omarchy.js?v=20260830-7" type="module"></script>
+<script src="../../assets/js/omarchy.js?v=20260830-12" type="module"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 import { ready as readyLogo } from './modules/logo.js';
+import { ready as readyBeams } from './modules/beams.js';
 
 /* Omarchy redesign — shell behavior.
    Everything via keyboard: Space = menu, t = theme, ? = hotkeys, 1-9 = pages. */
@@ -157,11 +158,22 @@ import { ready as readyLogo } from './modules/logo.js';
   }
   helpEl?.addEventListener('click', (e) => { if (e.target === helpEl) toggleHelp(); });
 
-  /* ---------------- News bar ---------------- */
-  const newsbar = document.querySelector('.newsbar');
-  newsbar?.querySelector('[data-news-dismiss]')?.addEventListener('click', () => {
-    try { localStorage.setItem('omarchy-newsbar-seen', newsbar.dataset.news); } catch (_) {}
-    newsbar.remove();
+  /* ---------------- Community flyout ---------------- */
+  const communityEl = document.querySelector('.workspace--menu');
+  const communityBtn = communityEl?.querySelector('.workspace__btn');
+  function setCommunity(open) {
+    if (!communityEl || !communityBtn) return;
+    communityEl.classList.toggle('open', open);
+    communityBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  function closeCommunity() { setCommunity(false); }
+  function toggleCommunity() { setCommunity(!communityEl?.classList.contains('open')); }
+  communityBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleCommunity();
+  });
+  document.addEventListener('click', (e) => {
+    if (communityEl && !communityEl.contains(e.target)) closeCommunity();
   });
 
   /* ---------------- Video facades ---------------- */
@@ -183,7 +195,8 @@ import { ready as readyLogo } from './modules/logo.js';
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      if (menuEl?.classList.contains('open')) closeMenu();
+      if (communityEl?.classList.contains('open')) closeCommunity();
+      else if (menuEl?.classList.contains('open')) closeMenu();
       else if (helpEl?.classList.contains('open')) toggleHelp();
       return;
     }
@@ -195,8 +208,16 @@ import { ready as readyLogo } from './modules/logo.js';
     else if (e.key === 't') { cycleTheme(1); }
     else if (e.key === 'T') { cycleTheme(-1); }
     else if (/^[1-9]$/.test(e.key)) {
-      const ws = document.querySelectorAll('.workspace')[Number(e.key) - 1];
-      if (ws) { osd(ws.textContent.trim()); window.location.href = ws.getAttribute('href'); }
+      const ws = document.querySelectorAll('.workspaces > .workspace')[Number(e.key) - 1];
+      if (!ws) return;
+      if (ws.classList.contains('workspace--menu')) {
+        e.preventDefault();
+        toggleCommunity();
+        osd('community');
+        return;
+      }
+      const href = ws.getAttribute('href');
+      if (href) { osd(ws.textContent.trim()); window.location.href = href; }
     }
   });
 
@@ -208,6 +229,9 @@ import { ready as readyLogo } from './modules/logo.js';
 
   /* ---------------- Homepage logo ---------------- */
   readyLogo();
+
+  /* ---------------- Team headings ---------------- */
+  readyBeams();
 
   /* ---------------- Boot ---------------- */
   buildMenu();
