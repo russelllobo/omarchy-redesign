@@ -11,40 +11,39 @@
 <meta property="og:description" content="A six-month, funded residency for the artists who make Omarchy beautiful.">
 <link rel="icon" type="image/svg+xml" href="../assets/img/omarchy-logo.svg?v=20260830-8">
 <link rel="icon" type="image/png" sizes="300x300" href="../assets/img/favicon.png?v=20260830-8">
-<link rel="stylesheet" href="../assets/css/omarchy.css?v=20260830-24">
+<link rel="stylesheet" href="../assets/css/omarchy.css?v=20260830-38">
 </head>
 
 <body>
 <header class="waybar">
   <div class="waybar__left">
     <div class="waybar__brand">
-      <button class="waybar__mark" type="button" data-open-menu title="Open Omarchy Menu (Space)" aria-label="Open Omarchy Menu"><img class="mark" src="../assets/img/omarchy-logo.svg?v=20260830-7" alt="" aria-hidden="true"></button>
+      <a class="waybar__mark" href="../index.html" title="Home" aria-label="Home"><img class="mark" src="../assets/img/omarchy-logo.svg?v=20260830-7" alt="" aria-hidden="true"></a>
     </div>
     <nav class="workspaces" aria-label="Pages">
       <a class="workspace workspace--external" href="https://omarchy.org/manual/"><b>1</b>manual</a>
       <a class="workspace workspace--external" href="https://omarchyplugins.com/"><b>2</b>plugins</a>
-      <a class="workspace" href="../security/index.html"><b>3</b>security</a>
-      <a class="workspace" href="../news/index.html"><b>4</b>news</a>
-      <a class="workspace" href="../teams/index.html"><b>5</b>teams</a>
-      <a class="workspace" href="../patrons/index.html"><b>6</b>patrons</a>
-      <a class="workspace" href="../sponsorships/index.html"><b>7</b>sponsorships</a>
-      <a class="workspace" href="../air/index.html" aria-current="page"><b>8</b>air</a>
+      <a class="workspace" href="../news/index.html"><b>3</b>news</a>
+      <a class="workspace" href="../teams/index.html"><b>4</b>teams</a>
+      <a class="workspace" href="../patrons/index.html"><b>5</b>patrons</a>
+      <a class="workspace" href="../sponsorships/index.html"><b>6</b>sponsorships</a>
+      <a class="workspace" href="../air/index.html" aria-current="page"><b>7</b>air</a>
       <div class="workspace workspace--menu">
         <button class="workspace__btn" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-community">
-          <b>9</b>community
+          <b>8</b>community
         </button>
         <div class="workspace__drop" id="nav-community" role="menu">
           <a class="workspace__drop-item" role="menuitem" href="https://discord.gg/tXFUdasqhY" target="_blank" rel="noopener">discord</a>
           <a class="workspace__drop-item" role="menuitem" href="../meetups/index.html">meetups</a>
+          <a class="workspace__drop-item" role="menuitem" href="../workstations/index.html">workstations</a>
         </div>
       </div>
-      <a class="workspace" href="../workstations/index.html"><b>10</b>workstations</a>
-      <a class="workspace workspace--external" href="https://supply.37signals.com/collections/omarchy"><b>11</b>merch</a>
+      <a class="workspace workspace--external" href="https://supply.37signals.com/collections/omarchy"><b>9</b>merch</a>
     </nav>
   </div>
   <div class="waybar__right">
     <div class="waybar__group">
-      <button class="indicator indicator--active" type="button" data-action="Cycle theme" data-keys="t" data-desc="Next palette" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{key:'t'}))" title="Cycle theme (t)" aria-label="Cycle theme">
+      <button class="indicator indicator--active" type="button" data-action="Cycle theme" data-keys="t" data-desc="Next palette" data-cycle-theme="1" title="Cycle theme (t)" aria-label="Cycle theme">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 1 0 0 14c.8 0 1.5-.7 1.5-1.5 0-.4-.15-.75-.4-1.02-.23-.27-.37-.62-.37-1 0-.82.68-1.48 1.5-1.48H12A3.5 3.5 0 0 0 15.5 6.5C15.3 3.3 12 1 8 1zM4.5 8a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2.5-3.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm4 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
         <span data-theme-name>Tokyo Night</span>
       </button>
@@ -55,7 +54,7 @@
 
 <main class="shell">
   <header class="page-head">
-    <div class="crumbs"><a href="../index.html">omarchy</a><span class="sep">/</span>air</div>
+    <div class="crumbs"><a class="crumbs__home" href="../index.html"><img class="crumbs__wordmark" src="../assets/img/omarchy-wordmark.svg?v=20260830-2" alt="omarchy" width="83" height="19"></a><span class="sep">/</span>air</div>
     <h1>Artists in Residence</h1>
     <p class="lede">A six-month residency for artists who make Omarchy beautiful. Themes, plugins, and whatever else. Creativity with the support of the Omacom Foundation. Up to five seats at any one time.</p>
   </header>
@@ -117,7 +116,7 @@
 </footer>
 
 <!-- Omarchy Menu: the way you reach everything. -->
-<div class="menu" role="dialog" aria-modal="true" aria-label="Omarchy Menu">
+<div class="menu" role="dialog" aria-modal="true" aria-label="Omarchy Menu" inert>
   <div class="menu__panel">
     <div class="menu__inputrow">
       <input class="menu__input" type="text" placeholder="go..." aria-label="Search actions">
@@ -132,19 +131,19 @@
   <a data-action="Go: Themes" href="../themes/index.html">t</a>
   <a data-action="Open the Manual" data-desc="omarchy.org/manual" data-keys="1" href="https://omarchy.org/manual/" target="_blank" rel="noopener">m</a>
   <a data-action="Open Plugin Marketplace" data-desc="500+ plugins" data-keys="2" href="https://omarchyplugins.com/" target="_blank" rel="noopener">p</a>
-  <a data-action="Go: Security" data-desc="Report a vulnerability" data-keys="3" href="../security/index.html">s</a>
-  <a data-action="Go: News" data-keys="4" href="../news/index.html">n</a>
-  <a data-action="Go: Teams" data-keys="5" href="../teams/index.html">t</a>
-  <a data-action="Go: Patrons" data-keys="6" href="../patrons/index.html">p</a>
-  <a data-action="Go: Sponsorships" data-keys="7" href="../sponsorships/index.html">s</a>
-  <a data-action="Go: Artists in Residence" data-keys="8" href="../air/index.html">a</a>
-  <a data-action="Go: Meetups" data-keys="9" href="../meetups/index.html">m</a>
+  <a data-action="Go: Security" data-desc="Report a vulnerability" href="../security/index.html">s</a>
+  <a data-action="Go: News" data-keys="3" href="../news/index.html">n</a>
+  <a data-action="Go: Teams" data-keys="4" href="../teams/index.html">t</a>
+  <a data-action="Go: Patrons" data-keys="5" href="../patrons/index.html">p</a>
+  <a data-action="Go: Sponsorships" data-keys="6" href="../sponsorships/index.html">s</a>
+  <a data-action="Go: Artists in Residence" data-keys="7" href="../air/index.html">a</a>
+  <a data-action="Go: Meetups" data-keys="8" href="../meetups/index.html">m</a>
   <a data-action="Go: Workstations" href="../workstations/index.html">w</a>
   <a data-action="Go: Security credits" href="../security/credits/index.html">s</a>
   <a data-action="Download ISO" data-desc="omarchy-4.0.1.iso" href="https://iso.omarchy.org/omarchy-4.0.1.iso">i</a>
   <a data-action="Open GitHub" data-desc="omacom/omarchy" href="https://github.com/omacom/omarchy" target="_blank" rel="noopener">g</a>
   <a data-action="Open Discord" data-desc="tXFUdasqhY" href="https://discord.gg/tXFUdasqhY" target="_blank" rel="noopener">d</a>
-  <a data-action="Open Merch" data-desc="supply.37signals.com" href="https://supply.37signals.com/collections/omarchy" target="_blank" rel="noopener">m</a>
+  <a data-action="Open Merch" data-desc="supply.37signals.com" data-keys="9" href="https://supply.37signals.com/collections/omarchy" target="_blank" rel="noopener">m</a>
   <a data-action="Be the Omarch" data-desc="omarchs.fyi" href="https://omarchs.fyi" target="_blank" rel="noopener">o</a>
   <button data-action="Theme: Tokyo Night" data-theme-set="tokyo-night">x</button>
   <button data-action="Theme: Gruvbox" data-theme-set="gruvbox">x</button>
@@ -155,7 +154,7 @@
 </div>
 
 <!-- Super+K: every hotkey, one screen. -->
-<div class="help" role="dialog" aria-modal="true" aria-label="Hotkeys">
+<div class="help" role="dialog" aria-modal="true" aria-label="Hotkeys" inert>
   <div class="help__panel" tabindex="-1">
     <div class="help__head"><span>Hotkeys</span><span class="esc">esc to close</span></div>
     <div class="help__grid">
@@ -169,6 +168,6 @@
   </div>
 </div>
 
-<script src="../assets/js/omarchy.js?v=20260830-12" type="module"></script>
+<script src="../assets/js/omarchy.js?v=20260830-19" type="module"></script>
 </body>
 </html>

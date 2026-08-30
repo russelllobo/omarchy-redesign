@@ -1,5 +1,5 @@
 import { ready as readyLogo } from './modules/logo.js';
-import { ready as readyBeams } from './modules/beams.js';
+import { ready as readyChroma } from './modules/chroma.js?v=19';
 
 /* Omarchy redesign — shell behavior.
    Everything via keyboard: Space = menu, t = theme, ? = hotkeys, 1-9 = pages. */
@@ -61,6 +61,7 @@ import { ready as readyBeams } from './modules/beams.js';
   const menuEl = document.querySelector('.menu');
   const menuInput = menuEl?.querySelector('.menu__input');
   const menuList = menuEl?.querySelector('.menu__list');
+  const helpEl = document.querySelector('.help');
   let menuItems = [];
   let sel = 0;
   let focusBeforeOverlay = null;
@@ -78,6 +79,8 @@ import { ready as readyBeams } from './modules/beams.js';
           else window.location.href = href;
         } else if (el.dataset.themeSet) {
           applyTheme(el.dataset.themeSet, true);
+        } else if (el.hasAttribute('data-cycle-theme')) {
+          cycleTheme(Number(el.dataset.cycleTheme) || 1);
         } else {
           el.click();
         }
@@ -112,20 +115,53 @@ import { ready as readyBeams } from './modules/beams.js';
     [...menuList.children].forEach((c, i) => c.classList.toggle('sel', i === sel));
   }
 
+  function overlayOpen() {
+    return !!(menuEl?.classList.contains('open') || helpEl?.classList.contains('open'));
+  }
+
+  function setOverlay(el, open) {
+    if (!el) return;
+    el.classList.toggle('open', open);
+    el.toggleAttribute('inert', !open);
+    document.body.classList.toggle('overlay-open', overlayOpen());
+  }
+
+  function restoreOverlayFocus() {
+    const trapped = document.activeElement;
+    if (trapped instanceof HTMLElement && (menuEl?.contains(trapped) || helpEl?.contains(trapped))) {
+      trapped.blur();
+    }
+    const target = focusBeforeOverlay;
+    focusBeforeOverlay = null;
+    if (
+      target instanceof HTMLElement &&
+      target.isConnected &&
+      target !== document.body &&
+      target !== document.documentElement &&
+      !menuEl?.contains(target) &&
+      !helpEl?.contains(target)
+    ) {
+      target.focus();
+    }
+    const still = document.activeElement;
+    if (still instanceof HTMLElement && (menuEl?.contains(still) || helpEl?.contains(still))) {
+      still.blur();
+    }
+  }
+
   function openMenu() {
     if (!menuEl) return;
     focusBeforeOverlay = document.activeElement;
-    menuEl.classList.add('open');
-    document.body.classList.add('overlay-open');
+    setOverlay(helpEl, false);
+    setOverlay(menuEl, true);
     menuInput.value = '';
     renderMenu('');
     menuInput.focus();
   }
   function closeMenu({ restoreFocus = true } = {}) {
     if (!menuEl?.classList.contains('open')) return;
-    menuEl.classList.remove('open');
-    if (!helpEl?.classList.contains('open')) document.body.classList.remove('overlay-open');
-    if (restoreFocus && focusBeforeOverlay instanceof HTMLElement) focusBeforeOverlay.focus();
+    setOverlay(menuEl, false);
+    if (restoreFocus) restoreOverlayFocus();
   }
   function toggleMenu() { menuEl?.classList.contains('open') ? closeMenu() : openMenu(); }
 
@@ -140,20 +176,17 @@ import { ready as readyBeams } from './modules/beams.js';
   document.querySelector('[data-open-menu]')?.addEventListener('click', openMenu);
 
   /* ---------------- Help overlay ---------------- */
-  const helpEl = document.querySelector('.help');
   function toggleHelp() {
     if (!helpEl) return;
     const opening = !helpEl.classList.contains('open');
     if (opening) {
       focusBeforeOverlay = document.activeElement;
       closeMenu({ restoreFocus: false });
-      helpEl.classList.add('open');
-      document.body.classList.add('overlay-open');
+      setOverlay(helpEl, true);
       helpEl.querySelector('.help__panel')?.focus();
     } else {
-      helpEl.classList.remove('open');
-      document.body.classList.remove('overlay-open');
-      if (focusBeforeOverlay instanceof HTMLElement) focusBeforeOverlay.focus();
+      setOverlay(helpEl, false);
+      restoreOverlayFocus();
     }
   }
   helpEl?.addEventListener('click', (e) => { if (e.target === helpEl) toggleHelp(); });
@@ -191,24 +224,64 @@ import { ready as readyBeams } from './modules/beams.js';
   });
 
   /* ---------------- Global hotkeys ---------------- */
-  const isTyping = () => /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '') || document.activeElement?.isContentEditable;
+  function isVisibleField(el) {
+    if (!(el instanceof HTMLElement)) return false;
+    if (el.closest('[inert]')) return false;
+    if (menuEl?.contains(el) && !menuEl.classList.contains('open')) return false;
+    if (helpEl?.contains(el) && !helpEl.classList.contains('open')) return false;
+    return el.getClientRects().length > 0;
+  }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
+  function isTyping() {
+    const el = document.activeElement;
+    if (!isVisibleField(el)) return false;
+    return /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable;
+  }
+
+  function workspaceDigit(e) {
+    if (/^Digit[1-9]$/.test(e.code)) return e.code.slice(5);
+    if (/^[1-9]$/.test(e.key)) return e.key;
+    return null;
+  }
+
+  document.querySelectorAll('[data-cycle-theme]').forEach((el) => {
+    el.addEventListener('click', () => cycleTheme(Number(el.dataset.cycleTheme) || 1));
+  });
+
+  menuEl?.toggleAttribute('inert', !menuEl.classList.contains('open'));
+  helpEl?.toggleAttribute('inert', !helpEl.classList.contains('open'));
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' || e.code === 'Escape') {
       if (communityEl?.classList.contains('open')) closeCommunity();
       else if (menuEl?.classList.contains('open')) closeMenu();
       else if (helpEl?.classList.contains('open')) toggleHelp();
       return;
     }
+
+    const space = e.key === ' ' || e.code === 'Space';
+    if (space && menuEl?.classList.contains('open') && !menuInput?.value) {
+      e.preventDefault();
+      if (!e.repeat) closeMenu();
+      return;
+    }
+
     if (isTyping()) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
 
-    if (e.key === ' ') { e.preventDefault(); toggleMenu(); }
-    else if (e.key === '?') { toggleHelp(); }
-    else if (e.key === 't') { cycleTheme(1); }
-    else if (e.key === 'T') { cycleTheme(-1); }
-    else if (/^[1-9]$/.test(e.key)) {
-      const ws = document.querySelectorAll('.workspaces > .workspace')[Number(e.key) - 1];
+    if (space) {
+      e.preventDefault();
+      if (!e.repeat) toggleMenu();
+    } else if (e.key === '?' || (e.code === 'Slash' && e.shiftKey)) {
+      if (!e.repeat) toggleHelp();
+    } else if (e.key === 't') {
+      cycleTheme(1);
+    } else if (e.key === 'T') {
+      cycleTheme(-1);
+    } else {
+      const n = workspaceDigit(e);
+      if (!n) return;
+      const ws = document.querySelectorAll('.workspaces > .workspace')[Number(n) - 1];
       if (!ws) return;
       if (ws.classList.contains('workspace--menu')) {
         e.preventDefault();
@@ -219,19 +292,13 @@ import { ready as readyBeams } from './modules/beams.js';
       const href = ws.getAttribute('href');
       if (href) { osd(ws.textContent.trim()); window.location.href = href; }
     }
-  });
-
-  /* ---------------- Reveal on scroll ---------------- */
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  }, true);
 
   /* ---------------- Homepage logo ---------------- */
   readyLogo();
 
   /* ---------------- Team headings ---------------- */
-  readyBeams();
+  readyChroma();
 
   /* ---------------- Boot ---------------- */
   buildMenu();

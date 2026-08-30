@@ -34,8 +34,12 @@ def render(page: Path) -> None:
 
     waybar = (PARTIALS / "waybar.html").read_text()
     ws = fm.get("ws", "")
+    rel_posix = rel.as_posix()
+    waybar = waybar.replace("{{WS_HOME}}", ' aria-current="page"' if rel_posix == "index.html" else "")
     for n in range(1, 12):
         waybar = waybar.replace("{{WS%d}}" % n, ' aria-current="page"' if str(n) == ws else "")
+    waybar = waybar.replace("{{WS_MEETUPS}}", ' aria-current="page"' if rel_posix == "meetups/index.html" else "")
+    waybar = waybar.replace("{{WS_STATIONS}}", ' aria-current="page"' if rel_posix == "workstations/index.html" else "")
     waybar = waybar.replace("{{PREFIX}}", prefix)
 
     footer = (PARTIALS / "footer.html").read_text().replace("{{PREFIX}}", prefix)
@@ -53,7 +57,7 @@ def render(page: Path) -> None:
 
 {footer}
 {overlays}
-<script src="{prefix}assets/js/omarchy.js?v=20260830-12" type="module"></script>
+<script src="{prefix}assets/js/omarchy.js?v=20260830-19" type="module"></script>
 </body>
 </html>
 """
