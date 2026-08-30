@@ -175,7 +175,8 @@ function ready() {
       canvas.style.height = `${native.height}px`;
       scaleCanvas(canvas, pre, native.width, native.height);
 
-      const playback = new CanvasPlayback({
+      let playback = null;
+      const makePlayback = () => new CanvasPlayback({
         canvas,
         width: () => native.width,
         height: () => native.height,
@@ -184,10 +185,16 @@ function ready() {
         effect: () => EFFECT,
         wasmUrl,
         onFinished() {
+          const finished = playback;
+          playback = null;
+          finished?.stop();
           markEtched();
           finishHero();
         },
-        frameRate: () => 240,
+        // The playback engine defaults to 120Hz. It paints once per display
+        // frame, so stepping at 240Hz only adds work on ordinary 60/120Hz
+        // panels without making the rendered animation smoother.
+        frameRate: () => 120,
       });
 
       const stopWatching = watchSize(pre, () => {
@@ -197,7 +204,8 @@ function ready() {
       const fail = () => {
         window.removeEventListener('error', onError);
         stopWatching();
-        playback.stop();
+        playback?.stop();
+        playback = null;
         document.querySelector('.ascii')?.classList.remove('ascii--live');
         markStatic();
         markEtched();
@@ -214,16 +222,17 @@ function ready() {
       window.addEventListener('error', onError);
 
       replay = () => {
+        playback?.stop();
         document.querySelector('.ascii')?.classList.remove('ascii--static');
         document.querySelector('.ascii')?.classList.remove('ascii--etched');
         document.querySelector('.ascii')?.classList.add('ascii--live');
+        playback = makePlayback();
         void playback.restart().catch(fail);
       };
 
       holder.append(canvas);
       link.append(holder);
-      document.querySelector('.ascii')?.classList.add('ascii--live');
-      void playback.restart().catch(fail);
+      replay();
     })
     .catch(() => {
       markStatic();

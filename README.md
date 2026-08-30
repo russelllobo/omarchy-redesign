@@ -72,11 +72,11 @@ Motion stays under 150ms. Workspace jumps are instant. The homepage mark is the 
 
 ## Weight
 
-A typical page is about **80 KB** over the wire and the heaviest is **376 KB**, down from 293 KB and 4.3 MB. `python3 tools/weigh.py` prints the current table.
+A typical page is about **80 KB** over the wire and the heaviest is **379 KB**, down from 293 KB and 4.3 MB. `python3 tools/weigh.py` prints the current table.
 
 Four things keep it there:
 
-- **Images are cut to the slots they land in.** The wall and theme grid paint into ~260 CSS px, so `tools/optimize_images.py` re-encodes each source into a small WebP ladder and `build.py` wires up `srcset`, letting a 1x display take the small file. Rungs sit ~1.35x above the slot: at render size that buys far more fidelity per byte than turning up the encoder quality.
+- **Images are cut to the slots they land in.** The wall and theme grid paint into responsive one-to-four-column slots, so `tools/optimize_images.py` re-encodes each source into a small WebP ladder and `build.py` wires up `srcset`. Intermediate rungs stop standard-DPR screens from jumping to an image nearly twice as wide as their device-pixel target, while the first visible image is loaded eagerly and the rest stay lazy.
 - **Fonts are subset.** `tools/subset_fonts.py` cuts JetBrains Mono to Latin plus the punctuation and block elements the ASCII mark needs, and drops the three faces the stylesheet never asks for. 650 KB of woff2 became 87 KB.
 - **The decorative modules load on demand.** The laser etcher is ~200 KB of wasm for one pass, so it is fetched at idle, only on the homepage, and skipped entirely under Save-Data, slow connections or reduced motion. The still glyph is the fallback.
 - **The build fills in the boring parts.** Every `<img>` gets intrinsic `width`/`height` and `decoding="async"`, and every asset URL gets one canonical content hash, so nothing shifts on load and nothing is fetched twice under two spellings.
@@ -84,7 +84,8 @@ Four things keep it there:
 Regenerating imagery is destructive by design — the originals live in git, not a stash directory:
 
 ```bash
-git checkout -- assets/img && find assets/img -name '*@*.webp' -delete
+git restore --source=cb97724^ --worktree -- assets/img/{workstations,themes,video,team,patrons,air,credits}
+find assets/img/{workstations,themes,video,team,patrons,air,credits} -name '*@*.webp' -delete
 python3 tools/optimize_images.py && python3 build.py
 ```
 

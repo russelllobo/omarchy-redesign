@@ -6,11 +6,12 @@ Each source becomes a ladder of WebP widths so srcset can hand a 1x desktop a
 file at its exact slot size and spend the big one only on high-DPR phones.
 
 The rungs come from the measured slots (see the `sizes` strings in
-pages/themes and pages/workstations): ~260-320 CSS px on desktop, ~340 in the
-two-column range, and up to ~480 on a phone in a single column.
+pages/themes and pages/workstations). Intermediate rungs keep two-column
+phones and standard-DPR desktop screens from jumping to a file nearly twice
+as wide as their device-pixel target.
 
 Re-run after adding art. Originals live in git history, not a stash dir, so
-restore with `git checkout -- assets/img` before regenerating.
+restore the original-resolution inputs from `cb97724^` before regenerating.
 """
 import sys
 from pathlib import Path
@@ -28,9 +29,9 @@ METHOD = 6
 # render size, that extra resolution buys far more fidelity per byte than
 # raising the encoder quality does (roughly +2dB for +40% vs +0.6dB for +70%).
 LADDERS = {
-    "workstations": (350, [700, 1100]),
-    "themes": (360, [720, 1000]),
-    "video": (720, [1280]),
+    "workstations": (350, [450, 700, 1100]),
+    "themes": (360, [540, 720, 1000]),
+    "video": (640, [720, 1280]),
     # Avatars render into a 176px box (.person img max-width). 240 is the
     # stock source, so it stays the top rung rather than upscaling to 352.
     "team": (176, [240]),
@@ -56,8 +57,8 @@ def main() -> None:
     if stale:
         sys.exit(
             "generated variants are already present, so the sources here are "
-            "already downscaled.\nRun `git checkout -- assets/img && find "
-            "assets/img -name '*@*.webp' -delete` first."
+            "already downscaled.\nRestore the original-resolution image folders "
+            "from `cb97724^` and delete their `@*.webp` derivatives first."
         )
 
     before = after = 0
