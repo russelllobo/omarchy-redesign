@@ -41,6 +41,10 @@ function markStatic() {
   document.querySelector('.ascii')?.classList.add('ascii--static');
 }
 
+function markEtched() {
+  document.querySelector('.ascii')?.classList.add('ascii--etched');
+}
+
 function afterFonts() {
   if (document.fonts?.ready == null) {
     return Promise.resolve();
@@ -160,7 +164,9 @@ function ready() {
         input: () => input,
         effect: () => EFFECT,
         wasmUrl,
-        onFinished() {},
+        onFinished() {
+          markEtched();
+        },
         frameRate: () => 240,
       });
 
@@ -174,6 +180,7 @@ function ready() {
         playback.stop();
         document.querySelector('.ascii')?.classList.remove('ascii--live');
         markStatic();
+        markEtched();
       };
 
       const onError = (event) => {
@@ -187,6 +194,7 @@ function ready() {
 
       replay = () => {
         document.querySelector('.ascii')?.classList.remove('ascii--static');
+        document.querySelector('.ascii')?.classList.remove('ascii--etched');
         document.querySelector('.ascii')?.classList.add('ascii--live');
         void playback.restart().catch(fail);
       };
@@ -198,6 +206,7 @@ function ready() {
     })
     .catch(() => {
       markStatic();
+      markEtched();
     });
 }
 
