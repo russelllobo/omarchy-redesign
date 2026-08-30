@@ -1,0 +1,52 @@
+<!-- Omarchy Menu: the way you reach everything. -->
+<div class="menu" role="dialog" aria-modal="true" aria-label="Omarchy Menu">
+  <div class="menu__panel">
+    <div class="menu__inputrow">
+      <input class="menu__input" type="text" placeholder="go..." aria-label="Search actions">
+    </div>
+    <div class="menu__list" role="listbox"></div>
+  </div>
+</div>
+
+<!-- Action registry consumed by the menu -->
+<div hidden aria-hidden="true">
+  <a data-action="Go: Home" data-keys="1" href="{{PREFIX}}index.html">h</a>
+  <a data-action="Go: News" data-keys="2" href="{{PREFIX}}news/index.html">n</a>
+  <a data-action="Go: Themes" data-keys="3" href="{{PREFIX}}themes/index.html">t</a>
+  <a data-action="Go: Teams" data-keys="4" href="{{PREFIX}}teams/index.html">t</a>
+  <a data-action="Go: Patrons" data-keys="5" href="{{PREFIX}}patrons/index.html">p</a>
+  <a data-action="Go: Sponsorships" data-keys="6" href="{{PREFIX}}sponsorships/index.html">s</a>
+  <a data-action="Go: Artists in Residence" data-keys="7" href="{{PREFIX}}air/index.html">a</a>
+  <a data-action="Go: Meetups" data-keys="8" href="{{PREFIX}}meetups/index.html">m</a>
+  <a data-action="Go: Workstations" data-keys="9" href="{{PREFIX}}workstations/index.html">w</a>
+  <a data-action="Go: Security" data-desc="Report a vulnerability" href="{{PREFIX}}security/index.html">s</a>
+  <a data-action="Go: Security credits" href="{{PREFIX}}security/credits/index.html">s</a>
+  <a data-action="Download ISO" data-desc="omarchy-4.0.1.iso" href="https://iso.omarchy.org/omarchy-4.0.1.iso">i</a>
+  <a data-action="Open the Manual" data-desc="omarchy.org/manual" href="https://omarchy.org/manual/" target="_blank" rel="noopener">m</a>
+  <a data-action="Open GitHub" data-desc="omacom/omarchy" href="https://github.com/omacom/omarchy" target="_blank" rel="noopener">g</a>
+  <a data-action="Open Plugin Marketplace" data-desc="500+ plugins" href="https://omarchyplugins.com/" target="_blank" rel="noopener">p</a>
+  <a data-action="Open Discord" data-desc="tXFUdasqhY" href="https://discord.gg/tXFUdasqhY" target="_blank" rel="noopener">d</a>
+  <a data-action="Open Merch" data-desc="supply.37signals.com" href="https://supply.37signals.com/collections/omarchy" target="_blank" rel="noopener">m</a>
+  <a data-action="Be the Omarch" data-desc="omarchs.fyi" href="https://omarchs.fyi" target="_blank" rel="noopener">o</a>
+  <button data-action="Theme: Tokyo Night" data-theme-set="tokyo-night">x</button>
+  <button data-action="Theme: Gruvbox" data-theme-set="gruvbox">x</button>
+  <button data-action="Theme: Catppuccin" data-theme-set="catppuccin">x</button>
+  <button data-action="Theme: Everforest" data-theme-set="everforest">x</button>
+  <button data-action="Theme: Ristretto" data-theme-set="ristretto">x</button>
+  <button data-action="Theme: Kanagawa" data-theme-set="kanagawa">x</button>
+</div>
+
+<!-- Super+K: every hotkey, one screen. -->
+<div class="help" role="dialog" aria-modal="true" aria-label="Hotkeys">
+  <div class="help__panel" tabindex="-1">
+    <div class="help__head"><span>Hotkeys</span><span class="esc">esc to close</span></div>
+    <div class="help__grid">
+      <div class="help__row"><span>Open / close the menu</span><kbd>Space</kbd></div>
+      <div class="help__row"><span>Jump to workspace 1&ndash;9</span><kbd>1&ndash;9</kbd></div>
+      <div class="help__row"><span>Next theme</span><kbd>t</kbd></div>
+      <div class="help__row"><span>Previous theme</span><kbd>T</kbd></div>
+      <div class="help__row"><span>This overlay</span><kbd>?</kbd></div>
+      <div class="help__row"><span>Close anything</span><kbd>Esc</kbd></div>
+    </div>
+  </div>
+</div>

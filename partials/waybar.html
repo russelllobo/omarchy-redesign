@@ -1,0 +1,32 @@
+<header class="waybar">
+  <div class="waybar__left">
+    <button class="waybar__brand" type="button" data-open-menu title="Open Omarchy Menu (Space)" aria-label="Open Omarchy Menu"><img class="mark" src="{{PREFIX}}assets/img/favicon.png?v=20260830-6" alt="" aria-hidden="true">omarchy</button>
+    <nav class="workspaces" aria-label="Pages">
+      <a class="workspace" href="{{PREFIX}}index.html"{{WS1}}><b>1</b>home</a>
+      <a class="workspace" href="{{PREFIX}}news/index.html"{{WS2}}><b>2</b>news</a>
+      <a class="workspace" href="{{PREFIX}}themes/index.html"{{WS3}}><b>3</b>themes</a>
+      <a class="workspace" href="{{PREFIX}}teams/index.html"{{WS4}}><b>4</b>teams</a>
+      <a class="workspace" href="{{PREFIX}}patrons/index.html"{{WS5}}><b>5</b>patrons</a>
+      <a class="workspace" href="{{PREFIX}}sponsorships/index.html"{{WS6}}><b>6</b>sponsors</a>
+      <a class="workspace" href="{{PREFIX}}air/index.html"{{WS7}}><b>7</b>air</a>
+      <a class="workspace" href="{{PREFIX}}meetups/index.html"{{WS8}}><b>8</b>meetups</a>
+      <a class="workspace" href="{{PREFIX}}workstations/index.html"{{WS9}}><b>9</b>stations</a>
+    </nav>
+    <nav class="elsewhere" aria-label="Elsewhere">
+      <a class="workspace workspace--external" href="https://omarchy.org/manual/"><b>10</b>manual</a>
+      <a class="workspace workspace--external" href="https://github.com/omacom/omarchy"><b>11</b>github</a>
+      <a class="workspace workspace--external" href="https://omarchyplugins.com/"><b>12</b>plugins</a>
+      <a class="workspace workspace--external" href="https://discord.gg/tXFUdasqhY"><b>13</b>discord</a>
+      <a class="workspace workspace--external" href="https://supply.37signals.com/collections/omarchy"><b>14</b>merch</a>
+      <a class="workspace workspace--external" href="{{PREFIX}}security/index.html"><b>15</b>security</a>
+    </nav>
+  </div>
+  <div class="waybar__right">
+    <div class="waybar__group">
+      <button class="indicator indicator--active" type="button" data-action="Cycle theme" data-keys="t" data-desc="Next palette" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{key:'t'}))" title="Cycle theme (t)" aria-label="Cycle theme">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 1 0 0 14c.8 0 1.5-.7 1.5-1.5 0-.4-.15-.75-.4-1.02-.23-.27-.37-.62-.37-1 0-.82.68-1.48 1.5-1.48H12A3.5 3.5 0 0 0 15.5 6.5C15.3 3.3 12 1 8 1zM4.5 8a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2.5-3.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm4 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
+        <span data-theme-name>Tokyo Night</span>
+      </button>
+    </div>
+  </div>
+</header>
