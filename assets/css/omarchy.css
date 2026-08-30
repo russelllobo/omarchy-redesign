@@ -5,8 +5,9 @@
    without latency (all motion <= 150ms, workspace jumps are instant).
    ========================================================================== */
 
-/* ---------- Fonts ---------- */
-@font-face { font-display: swap; font-family: 'JetBrains Mono'; font-style: normal; font-weight: 300; src: url('../fonts/JetBrainsMono-Light.woff2') format('woff2'); }
+/* ---------- Fonts ----------
+   Subset to Latin + punctuation + block elements (see tools/subset_fonts.py).
+   Only the four faces the stylesheet references are shipped. */
 @font-face { font-display: swap; font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; src: url('../fonts/JetBrainsMono-Regular.woff2') format('woff2'); }
 @font-face { font-display: swap; font-family: 'JetBrains Mono'; font-style: italic; font-weight: 400; src: url('../fonts/JetBrainsMono-Italic.woff2') format('woff2'); }
 @font-face { font-display: swap; font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; src: url('../fonts/JetBrainsMono-Medium.woff2') format('woff2'); }
@@ -254,18 +255,11 @@ kbd {
 .indicator:hover { color: var(--highlight); background: var(--bg-panel); }
 .indicator svg { width: 0.95rem; height: 0.95rem; flex: none; }
 
-/* Progressive disclosure: idle indicators hidden; bar hover reveals them dimly */
-.indicator--idle { opacity: 0; transition: opacity var(--t), color var(--t), background-color var(--t); }
-.waybar:hover .indicator--idle { opacity: 0.45; }
-.indicator--idle:hover { opacity: 1; }
 .indicator--active { color: var(--accent); }
 .indicator--active:hover { color: var(--highlight); background: var(--bg-panel); }
 
 /* Keep the desktop workspace metaphor without making the document wider than
    the device. On phones, the bar becomes a breadcrumb: brand + current page. */
-@media (max-width: 64rem) {
-  .indicator--idle { display: none; }
-}
 @media (max-width: 44rem) {
   .workspaces .workspace:not([aria-current='page']) { display: none; }
   .workspace { min-width: auto; padding-inline: 0.75rem; }
@@ -459,26 +453,6 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 .install__ver:focus-visible .install__gh { opacity: 1; }
 
 /* ==========================================================================
-   Buttons — rectangular, 1px, uppercase-ish. No pills.
-   ========================================================================== */
-.btnrow { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-.btn {
-  display: inline-flex; align-items: center; gap: 0.55em;
-  border: 1px solid var(--border-strong);
-  background: none; color: var(--fg);
-  font: inherit; font-size: 0.875rem; font-weight: 500;
-  padding: 0.62em 1.05em; cursor: pointer; text-decoration: none;
-  transition: border-color var(--t), color var(--t), background-color var(--t);
-}
-.btn svg { width: 1em; height: 1em; }
-.btn--primary { border-color: var(--accent); color: var(--accent); }
-@media (hover: hover) {
-  .btn:hover { border-color: var(--highlight); color: var(--bg); background: var(--highlight); }
-  .btn--primary:hover { border-color: var(--highlight); background: var(--highlight); color: var(--bg); }
-}
-.btn--sm { font-size: 0.8125rem; padding: 0.45em 0.8em; }
-
-/* ==========================================================================
    Videos
    ========================================================================== */
 .videos { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
@@ -504,53 +478,6 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 .video:hover .video__label,
 .video:hover .video__label .who { color: var(--highlight); }
 .video iframe { width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; }
-
-/* ==========================================================================
-   Spec panel (omakase inventory) & feature list
-   ========================================================================== */
-.spec { border: 1px solid var(--border); background: var(--bg-panel); }
-.spec__row { display: grid; grid-template-columns: minmax(9rem, 14rem) 1fr; }
-.spec__row + .spec__row { border-top: 1px solid var(--border); }
-.spec__k { padding: 0.8rem 1.1rem; color: var(--fg-dim); border-right: 1px solid var(--border); font-size: 0.875rem; }
-.spec__v { padding: 0.8rem 1.1rem; }
-.spec__v .val { color: var(--fg); font-weight: 500; }
-.spec__v .note { color: var(--fg-dim); font-size: 0.875em; }
-@media (max-width: 40rem) {
-  .spec__row { grid-template-columns: 1fr; }
-  .spec__k { border-right: 0; border-bottom: 1px dashed var(--border); padding: 0.55rem 1.1rem; }
-  .spec__v { padding-top: 0.55rem; }
-}
-
-.principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-@media (max-width: 56rem) { .principles { grid-template-columns: 1fr; } }
-.principle { background: var(--bg); padding: 1.4rem 1.35rem; }
-.principle h3 { font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--accent-2); }
-.principle p { color: var(--fg-dim); font-size: 0.875rem; }
-.principle kbd { font-size: 0.75rem; }
-
-/* ==========================================================================
-   Live theme strip
-   ========================================================================== */
-.themestrip { border: 1px solid var(--border); }
-.themestrip__bar {
-  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); background: var(--bg-panel);
-  flex-wrap: wrap;
-}
-.themestrip__name { font-weight: 700; }
-.themestrip__name .sw { display: inline-block; width: 0.75em; height: 0.75em; background: var(--accent); margin-right: 0.55em; }
-.themestrip__hint { font-size: 0.8125rem; color: var(--fg-dim); }
-.themestrip__term { padding: 1.1rem 1.25rem; background: var(--bg-inset); font-size: 0.875rem; overflow-x: auto; }
-.themestrip__term .c-ps { color: var(--ok); }
-.themestrip__term .c-cmd { color: var(--fg); }
-.themestrip__term .c-flag { color: var(--accent); }
-.themestrip__term .c-str { color: var(--warn); }
-.themestrip__term .c-com { color: var(--fg-dim); font-style: italic; }
-.themestrip__term .c-ok { color: var(--ok); }
-.themestrip__term .c-acc2 { color: var(--accent-2); }
-.themestrip__term .c-cyan { color: var(--cyan); }
-.themestrip__palette { display: grid; grid-template-columns: repeat(8, 1fr); border-top: 1px solid var(--border); }
-.themestrip__palette span { height: 1.6rem; }
 
 /* ==========================================================================
    News list
@@ -584,7 +511,12 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 .peoplegroup__head h2 { font-size: 1.15rem; }
 .peoplegroup__head .sub { color: var(--fg-dim); font-size: 0.875rem; }
 .people { display: grid; grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr)); }
-.person { background: var(--bg); padding: 1.1rem; display: flex; flex-direction: column; gap: 0.7rem; border: 1px solid var(--border); margin: -1px 0 0 -1px; }
+.person {
+  background: var(--bg); padding: 1.1rem;
+  display: flex; flex-direction: column; gap: 0.7rem;
+  border: 1px solid var(--border); margin: -1px 0 0 -1px;
+  content-visibility: auto; contain-intrinsic-size: auto 18rem;
+}
 .person img { width: 100%; max-width: 11rem; aspect-ratio: 1; height: auto; object-fit: cover; border-radius: 50%; filter: grayscale(0.25); }
 .person__name { font-weight: 700; font-size: 0.95rem; }
 .person__name a { color: var(--fg); text-decoration: none; }
@@ -647,7 +579,10 @@ html.wte-home .ascii.ascii--static .ascii__wte { display: none; }
 .themes__install-note { border: 1px solid var(--border); background: var(--bg-panel); padding: 1rem 1.25rem; color: var(--fg-dim); font-size: 0.9rem; margin-bottom: 2rem; max-width: 52rem; }
 .themes__install-note kbd { font-size: 0.8em; }
 .themegrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-.theme-card { background: var(--bg); display: flex; flex-direction: column; text-decoration: none; }
+.theme-card {
+  background: var(--bg); display: flex; flex-direction: column; text-decoration: none;
+  content-visibility: auto; contain-intrinsic-size: auto 13rem;
+}
 .theme-card img { aspect-ratio: 16 / 10; object-fit: cover; width: 100%; border-bottom: 1px solid var(--border); filter: saturate(0.95); transition: filter var(--t); }
 .theme-card:hover img { filter: saturate(1.1); }
 .theme-card__name { padding: 0.7rem 0.9rem; font-size: 0.875rem; font-weight: 500; color: var(--fg); display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }

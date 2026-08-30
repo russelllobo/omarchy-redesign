@@ -4,3 +4,6 @@ __pycache__/
 *.swp
 .idea/
 .vscode/
+
+# build tooling caches
+tools/__pycache__/

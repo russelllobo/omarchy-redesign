@@ -1,8 +1,9 @@
-import { ready as readyLogo } from './modules/logo.js';
-import { ready as readyChroma } from './modules/chroma.js?v=19';
-
 /* Omarchy redesign — shell behavior.
-   Everything via keyboard: Space = menu, t = theme, ? = hotkeys, 1-9 = pages. */
+   Everything via keyboard: Space = menu, t = theme, ? = hotkeys, 1-9 = pages.
+
+   The two decorative modules are imported on demand: logo.js drags in a wasm
+   etcher and only the homepage has a mark to etch, chroma.js only matters on
+   pages with a [data-chroma] heading. */
 
 (() => {
   'use strict';
@@ -294,12 +295,22 @@ import { ready as readyChroma } from './modules/chroma.js?v=19';
     }
   }, true);
 
-  /* ---------------- Homepage logo ---------------- */
-  readyLogo();
+  /* ---------------- Decorative modules ---------------- */
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------------- Team headings ---------------- */
-  readyChroma();
+  if (!still && document.querySelector('[data-chroma]')) {
+    import('./modules/chroma.js').then((m) => m.ready());
+  }
+
+  if (!still && root.classList.contains('wte-home') && document.querySelector('.ascii > a pre')) {
+    idle(() => import('./modules/logo.js').then((m) => m.ready()));
+  }
 
   /* ---------------- Boot ---------------- */
   buildMenu();
+
+  function idle(fn) {
+    if (typeof requestIdleCallback === 'function') requestIdleCallback(fn, { timeout: 2000 });
+    else setTimeout(fn, 200);
+  }
 })();

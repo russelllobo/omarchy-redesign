@@ -14,6 +14,14 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+// The etcher costs ~200KB of wasm for one decorative pass. Metered and slow
+// connections get the static glyph instead, same as reduced-motion users.
+function tooExpensive() {
+  const net = navigator.connection;
+  if (net == null) return false;
+  return net.saveData === true || /^(slow-)?2g$/.test(net.effectiveType ?? '');
+}
+
 let wasmBytes = null;
 
 async function loadWasm() {
@@ -117,7 +125,7 @@ async function loadCanvasPlayback() {
 }
 
 function ready() {
-  if (prefersReducedMotion()) return;
+  if (prefersReducedMotion() || tooExpensive()) return;
   if (!document.documentElement.classList.contains('wte-home')) return;
 
   const pre = document.querySelector('.ascii > a pre');
@@ -137,9 +145,8 @@ function ready() {
   }
 
   afterFonts()
-    .then(loadWasm)
-    .then(loadCanvasPlayback)
-    .then((CanvasPlayback) => {
+    .then(() => Promise.all([loadWasm(), loadCanvasPlayback()]))
+    .then(([, CanvasPlayback]) => {
       const box = pre.getBoundingClientRect();
       if (box.width < 8 || box.height < 8) {
         markStatic();
