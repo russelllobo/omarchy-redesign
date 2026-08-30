@@ -2,8 +2,8 @@
    Everything via keyboard: Space = menu, t = theme, ? = hotkeys, 1-9 = pages.
 
    The two decorative modules are imported on demand: logo.js drags in a wasm
-   etcher and only the homepage has a mark to etch, chroma.js only matters on
-   pages with a [data-chroma] heading. */
+   etcher and only the homepage has a mark to etch; chroma.js loads when a
+   heading or nav mark can actually sweep. */
 
 (() => {
   'use strict';
@@ -157,7 +157,9 @@
     setOverlay(menuEl, true);
     menuInput.value = '';
     renderMenu('');
-    menuInput.focus();
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      menuInput.focus();
+    }
   }
   function closeMenu({ restoreFocus = true } = {}) {
     if (!menuEl?.classList.contains('open')) return;
@@ -174,7 +176,10 @@
     else if (e.key === 'Enter') { e.preventDefault(); const it = hits[sel]; if (it) { closeMenu(); it.run(); } }
   });
   menuEl?.addEventListener('click', (e) => { if (e.target === menuEl) closeMenu(); });
-  document.querySelector('[data-open-menu]')?.addEventListener('click', openMenu);
+  document.querySelector('[data-open-menu]')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
 
   /* ---------------- Help overlay ---------------- */
   function toggleHelp() {
@@ -298,7 +303,7 @@
   /* ---------------- Decorative modules ---------------- */
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (!still && document.querySelector('[data-chroma]')) {
+  if (!still && document.querySelector('[data-chroma], [data-chroma-click], h1')) {
     import('./modules/chroma.js').then((m) => m.ready());
   }
 

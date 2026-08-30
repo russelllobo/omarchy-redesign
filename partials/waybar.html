@@ -1,24 +1,24 @@
 <header class="waybar">
   <div class="waybar__left">
     <div class="waybar__brand">
-      <a class="waybar__mark" href="{{PREFIX}}index.html" title="Home" aria-label="Home"{{WS_HOME}}><img class="mark" src="{{PREFIX}}assets/img/omarchy-logo.svg?v=20260830-7" alt="" aria-hidden="true"></a>
+      <a class="waybar__mark" href="{{PREFIX}}index.html" title="Home" aria-label="Home"{{WS_HOME}}><span class="mark" aria-hidden="true"></span></a>
     </div>
     <nav class="workspaces" aria-label="Pages">
       <a class="workspace workspace--external" href="https://omarchy.org/manual/"><b>1</b>manual</a>
       <a class="workspace workspace--external" href="https://omarchyplugins.com/"><b>2</b>plugins</a>
-      <a class="workspace" href="{{PREFIX}}news/index.html"{{WS3}}><b>3</b>news</a>
-      <a class="workspace" href="{{PREFIX}}teams/index.html"{{WS4}}><b>4</b>teams</a>
-      <a class="workspace" href="{{PREFIX}}patrons/index.html"{{WS5}}><b>5</b>patrons</a>
-      <a class="workspace" href="{{PREFIX}}sponsorships/index.html"{{WS6}}><b>6</b>sponsorships</a>
-      <a class="workspace" href="{{PREFIX}}air/index.html"{{WS7}}><b>7</b>air</a>
+      <a class="workspace" href="{{PREFIX}}news/index.html"{{WS3}}><b>3</b><span data-chroma="nav-news" data-chroma-click>news</span></a>
+      <a class="workspace" href="{{PREFIX}}teams/index.html"{{WS4}}><b>4</b><span data-chroma="nav-teams" data-chroma-click>teams</span></a>
+      <a class="workspace" href="{{PREFIX}}patrons/index.html"{{WS5}}><b>5</b><span data-chroma="nav-patrons" data-chroma-click>patrons</span></a>
+      <a class="workspace" href="{{PREFIX}}sponsorships/index.html"{{WS6}}><b>6</b><span data-chroma="nav-sponsorships" data-chroma-click>sponsorships</span></a>
+      <a class="workspace" href="{{PREFIX}}air/index.html"{{WS7}}><b>7</b><span data-chroma="nav-air" data-chroma-click>air</span></a>
       <div class="workspace workspace--menu"{{WS8}}>
         <button class="workspace__btn" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="nav-community">
-          <b>8</b>community
+          <b>8</b><span data-chroma="nav-community" data-chroma-click>community</span>
         </button>
         <div class="workspace__drop" id="nav-community" role="menu">
           <a class="workspace__drop-item" role="menuitem" href="https://discord.gg/tXFUdasqhY" target="_blank" rel="noopener">discord</a>
-          <a class="workspace__drop-item" role="menuitem" href="{{PREFIX}}meetups/index.html"{{WS_MEETUPS}}>meetups</a>
-          <a class="workspace__drop-item" role="menuitem" href="{{PREFIX}}workstations/index.html"{{WS_STATIONS}}>workstations</a>
+          <a class="workspace__drop-item" role="menuitem" href="{{PREFIX}}meetups/index.html"{{WS_MEETUPS}}><span data-chroma="nav-meetups" data-chroma-click>meetups</span></a>
+          <a class="workspace__drop-item" role="menuitem" href="{{PREFIX}}workstations/index.html"{{WS_STATIONS}}><span data-chroma="nav-workstations" data-chroma-click>workstations</span></a>
         </div>
       </div>
       <a class="workspace workspace--external" href="https://supply.37signals.com/collections/omarchy"><b>9</b>merch</a>
@@ -26,6 +26,7 @@
   </div>
   <div class="waybar__right">
     <div class="waybar__group">
+      <button class="indicator indicator--menu" type="button" data-open-menu title="Menu" aria-label="Open menu">menu</button>
       <button class="indicator indicator--active" type="button" data-action="Cycle theme" data-keys="t" data-desc="Next palette" data-cycle-theme="1" title="Cycle theme (t)" aria-label="Cycle theme">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a7 7 0 1 0 0 14c.8 0 1.5-.7 1.5-1.5 0-.4-.15-.75-.4-1.02-.23-.27-.37-.62-.37-1 0-.82.68-1.48 1.5-1.48H12A3.5 3.5 0 0 0 15.5 6.5C15.3 3.3 12 1 8 1zM4.5 8a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm2.5-3.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm4 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
         <span data-theme-name>Tokyo Night</span>
