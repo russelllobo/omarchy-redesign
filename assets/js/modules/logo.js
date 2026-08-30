@@ -53,6 +53,10 @@ function markEtched() {
   document.querySelector('.ascii')?.classList.add('ascii--etched');
 }
 
+function finishHero() {
+  document.dispatchEvent(new Event('omarchy:hero-done'));
+}
+
 function afterFonts() {
   if (document.fonts?.ready == null) {
     return Promise.resolve();
@@ -125,12 +129,18 @@ async function loadCanvasPlayback() {
 }
 
 function ready() {
-  if (prefersReducedMotion() || tooExpensive()) return;
+  if (prefersReducedMotion() || tooExpensive()) {
+    finishHero();
+    return;
+  }
   if (!document.documentElement.classList.contains('wte-home')) return;
 
   const pre = document.querySelector('.ascii > a pre');
   const link = pre?.parentElement;
-  if (!(pre instanceof HTMLPreElement) || link == null) return;
+  if (!(pre instanceof HTMLPreElement) || link == null) {
+    finishHero();
+    return;
+  }
 
   let replay = () => {};
   link.addEventListener('click', (event) => {
@@ -141,6 +151,7 @@ function ready() {
   const input = artFromPre(pre);
   if (input.trim() === '') {
     markStatic();
+    finishHero();
     return;
   }
 
@@ -150,6 +161,7 @@ function ready() {
       const box = pre.getBoundingClientRect();
       if (box.width < 8 || box.height < 8) {
         markStatic();
+        finishHero();
         return;
       }
 
@@ -173,6 +185,7 @@ function ready() {
         wasmUrl,
         onFinished() {
           markEtched();
+          finishHero();
         },
         frameRate: () => 240,
       });
@@ -188,6 +201,7 @@ function ready() {
         document.querySelector('.ascii')?.classList.remove('ascii--live');
         markStatic();
         markEtched();
+        finishHero();
       };
 
       const onError = (event) => {
@@ -214,6 +228,7 @@ function ready() {
     .catch(() => {
       markStatic();
       markEtched();
+      finishHero();
     });
 }
 

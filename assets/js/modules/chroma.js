@@ -2,11 +2,15 @@
 // Marks with the same data-chroma value share one clock.
 // data-chroma-click plays on click only (waybar tabs). A click that leaves
 // the page stores the group so the destination can play without delaying nav.
+// On the homepage the heading waits for the ASCII mark to finish etching.
 
 const BAND_HALF = 22;
 const SWEEP_START = 0;
 const SWEEP_END = 100 + BAND_HALF;
 const DURATION_MS = 700;
+const HERO_DONE = 'omarchy:hero-done';
+const HERO_BEAT_MS = 200;
+const HERO_WAIT_MS = 10000;
 const PLAY_KEY = 'omarchy-chroma-play';
 const FALLBACK_STOPS = ['#c679c4', '#fa3d1d', '#ffb005', '#e1e1fe', '#0358f7'];
 
@@ -70,7 +74,30 @@ function clearPending() {
   }
 }
 
-function bind(marks, { clickOnly, playNow }) {
+function waitingOnHero() {
+  return (
+    document.documentElement.classList.contains('wte-home') &&
+    document.querySelector('.ascii > a pre') != null &&
+    document.querySelector('.ascii.ascii--etched, .ascii.ascii--static') == null
+  );
+}
+
+function afterHero(fn) {
+  let fallback = window.setTimeout(() => {
+    fallback = 0;
+    fn();
+  }, HERO_WAIT_MS);
+
+  document.addEventListener(HERO_DONE, () => {
+    if (fallback !== 0) {
+      window.clearTimeout(fallback);
+      fallback = 0;
+    }
+    window.setTimeout(fn, HERO_BEAT_MS);
+  });
+}
+
+function bind(marks, { clickOnly, playNow, defer }) {
   let raf = 0;
   const stop = () => {
     if (raf === 0) return;
@@ -123,12 +150,13 @@ function bind(marks, { clickOnly, playNow }) {
     });
   }
 
-  if (!clickOnly || playNow) run();
+  if (playNow || (!clickOnly && !defer)) run();
   if (!clickOnly) {
     window.addEventListener('pageshow', (event) => {
       if (event.persisted) run();
     });
   }
+  return run;
 }
 
 function ready() {
@@ -154,7 +182,11 @@ function ready() {
       playNow: pending === pack[0].getAttribute('data-chroma'),
     });
   }
-  if (headings.length) bind(headings, { clickOnly: false, playNow: false });
+  if (headings.length) {
+    const defer = waitingOnHero();
+    const play = bind(headings, { clickOnly: false, playNow: false, defer });
+    if (defer) afterHero(play);
+  }
 }
 
 export { ready };
